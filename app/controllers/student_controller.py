@@ -1,3 +1,10 @@
+"""
+Student Controller module.
+
+Defines API endpoints for student resource management (CRUD operations)
+and registers them to the main FastAPI application instance.
+"""
+
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -12,15 +19,21 @@ from app.schemas.student import (
 )
 from app.services.student_service import StudentService
 
-
+# Instantiate core repository and service layers
 repository = StudentRepository()
 service = StudentService(repository)
 
-
+# Database Session Dependency type alias
 DbSession = Annotated[Session, Depends(get_db)]
 
 
 def register_student_routes(app: FastAPI):
+    """
+    Registers student routing endpoints on the provided FastAPI application.
+    
+    Args:
+        app (FastAPI): The main FastAPI application instance.
+    """
 
     @app.post(
         "/students",
@@ -31,6 +44,9 @@ def register_student_routes(app: FastAPI):
         student_data: StudentCreate,
         db: DbSession
     ):
+        """
+        Creates a new student record.
+        """
         return service.create_student(db, student_data)
 
     @app.get(
@@ -40,6 +56,9 @@ def register_student_routes(app: FastAPI):
     def get_all_students(
         db: DbSession
     ):
+        """
+        Retrieves a list of all students.
+        """
         return service.get_all_students(db)
 
     @app.get(
@@ -50,6 +69,10 @@ def register_student_routes(app: FastAPI):
         student_id: int,
         db: DbSession
     ):
+        """
+        Retrieves a single student's details by their ID.
+        Raises 404 HTTP Exception if student is not found.
+        """
         student = service.get_student_by_id(db, student_id)
 
         if student is None:
@@ -69,6 +92,10 @@ def register_student_routes(app: FastAPI):
         student_data: StudentUpdate,
         db: DbSession
     ):
+        """
+        Updates details of a student matching the specified ID.
+        Raises 404 HTTP Exception if student is not found.
+        """
         student = service.get_student_by_id(db, student_id)
 
         if student is None:
@@ -91,6 +118,10 @@ def register_student_routes(app: FastAPI):
         student_id: int,
         db: DbSession
     ):
+        """
+        Deletes a student matching the specified ID.
+        Raises 404 HTTP Exception if student is not found.
+        """
         student = service.get_student_by_id(db, student_id)
 
         if student is None:
