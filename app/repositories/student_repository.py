@@ -57,6 +57,18 @@ class StudentRepository:
 
         return result.scalar_one_or_none()
 
+    def get_by_email(
+        self,
+        db: Session,
+        email: str
+    ) -> Student | None:
+        statement = select(Student).where(
+            Student.email == email
+        )
+        result = db.execute(statement)
+
+        return result.scalar_one_or_none() 
+
     def update(self, db: Session, student: Student) -> Student:
         """
         Saves changes made to an existing student instance.

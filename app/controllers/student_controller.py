@@ -44,6 +44,16 @@ def register_student_routes(app: FastAPI):
         student_data: StudentCreate,
         db: DbSession
     ):
+        try:
+            return service.create_student(db, student_data)
+            
+        except ValueError as error:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(error)
+            )
+
+
         """
         Creates a new student record.
         """

@@ -32,6 +32,10 @@ class StudentService:
         Returns:
             Student: Created student database record.
         """
+        existing_student = self.repository.get_by_email(db, student_data.email)
+        if existing_student:
+            raise ValueError("Student with this email already exists")
+        
         # Map the input Pydantic schema to the SQLAlchemy database model
         student = Student(
             name=student_data.name,
