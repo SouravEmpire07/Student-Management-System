@@ -26,20 +26,42 @@ class StudentRepository:
 
         return student
 
-    def get_all(self, db: Session) -> list[Student]:
-        """
-        Retrieves all student records from the database.
+    # def get_all(self, db: Session) -> list[Student]:
+    #     """
+    #     Retrieves all student records from the database.
         
-        Args:
-            db (Session): Active database session.
+    #     Args:
+    #         db (Session): Active database session.
             
-        Returns:
-            list[Student]: List of all student model instances.
-        """
+    #     Returns:
+    #         list[Student]: List of all student model instances.
+    #     """
+    #     statement = select(Student)
+    #     result = db.execute(statement)
+
+    #     return list(result.scalars().all())
+
+    def get_all(
+    self,
+        db: Session,
+        department: str | None = None,
+        year: int | None = None
+    ) -> list[Student]:
         statement = select(Student)
+
+        if department is not None:
+            statement = statement.where(
+                Student.department == department
+            )
+
+        if year is not None:
+            statement = statement.where(
+                Student.year == year
+            )
+
         result = db.execute(statement)
 
-        return list(result.scalars().all())
+        return list(result.scalars().all())  
 
     def get_by_id(self, db: Session, student_id: int) -> Student | None:
         """

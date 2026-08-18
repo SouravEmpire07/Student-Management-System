@@ -48,17 +48,29 @@ class StudentService:
 
         return self.repository.create(db, student)
 
-    def get_all_students(self, db: Session) -> list[Student]:
-        """
-        Retrieves all students list.
+    # def get_all_students(self, db: Session) -> list[Student]:
+    #     """
+    #     Retrieves all students list.
         
-        Args:
-            db (Session): Active database session.
+    #     Args:
+    #         db (Session): Active database session.
             
-        Returns:
-            list[Student]: List of all students.
-        """
-        return self.repository.get_all(db)
+    #     Returns:
+    #         list[Student]: List of all students.
+    #     """
+    #     return self.repository.get_all(db)
+
+    def get_all_students(
+        self,
+        db: Session,
+        department: str | None = None,
+        year: int | None = None
+    ) -> list[Student]:
+        return self.repository.get_all(
+            db,
+            department,
+            year
+        )
 
     def get_student_by_id(
         self,

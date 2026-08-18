@@ -46,7 +46,7 @@ def register_student_routes(app: FastAPI):
     ):
         try:
             return service.create_student(db, student_data)
-            
+
         except ValueError as error:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -59,17 +59,35 @@ def register_student_routes(app: FastAPI):
         """
         return service.create_student(db, student_data)
 
+    # @app.get(
+    #     "/students",
+    #     response_model=list[StudentResponse]
+    # )
+    # def get_all_students(
+    #     db: DbSession
+    # ):
+    #     """
+    #     Retrieves a list of all students.
+    #     """
+    #     return service.get_all_students(db)
+
     @app.get(
         "/students",
         response_model=list[StudentResponse]
     )
     def get_all_students(
-        db: DbSession
+        db: DbSession,
+        department: str | None = None,
+        year: int | None = None
     ):
         """
-        Retrieves a list of all students.
+        Retrieves a list of all students, optionally filtered by department and/or year.
         """
-        return service.get_all_students(db)
+        return service.get_all_students(
+            db,
+            department,
+            year
+        )
 
     @app.get(
         "/students/{student_id}",
