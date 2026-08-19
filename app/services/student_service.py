@@ -29,9 +29,13 @@ class StudentService:
             db (Session): Active database session.
             student_data (StudentCreate): Input payload for creating a student.
             
+        Raises:
+            ValueError: If a student with the same email already exists in the database.
+            
         Returns:
             Student: Created student database record.
         """
+        # Ensure email uniqueness before committing a new student record
         existing_student = self.repository.get_by_email(db, student_data.email)
         if existing_student:
             raise ValueError("Student with this email already exists")
@@ -48,29 +52,29 @@ class StudentService:
 
         return self.repository.create(db, student)
 
-    # def get_all_students(self, db: Session) -> list[Student]:
-    #     """
-    #     Retrieves all students list.
-        
-    #     Args:
-    #         db (Session): Active database session.
-            
-    #     Returns:
-    #         list[Student]: List of all students.
-    #     """
-    #     return self.repository.get_all(db)
-
     def get_all_students(
         self,
         db: Session,
         department: str | None = None,
         year: int | None = None
     ) -> list[Student]:
+        """
+        Retrieves a list of all students, optionally filtered by department and/or year.
+        
+        Args:
+            db (Session): Active database session.
+            department (str | None): Optional department name to filter by.
+            year (int | None): Optional academic year to filter by.
+            
+        Returns:
+            list[Student]: List of student records matching the criteria.
+        """
         return self.repository.get_all(
             db,
             department,
             year
         )
+
 
     def get_student_by_id(
         self,
