@@ -32,7 +32,9 @@ class StudentRepository:
         search: str | None = None,
         department: str | None = None,
         year: int | None = None,
-        cgpa: float | None = None
+        cgpa: float | None = None,
+        page: int = 1,
+        limit: int = 10
     ) -> list[Student]:
         """
         Retrieves all student records, with optional search and filtering by department, year, and minimum CGPA.
@@ -74,6 +76,10 @@ class StudentRepository:
             statement = statement.where(
                 Student.cgpa >= cgpa
             )
+
+        # Apply pagination
+        offset = (page - 1) * limit
+        statement = statement.offset(offset).limit(limit)
 
         result = db.execute(statement)
 

@@ -58,7 +58,9 @@ class StudentService:
         search: str | None = None,
         department: str | None = None,
         year: int | None = None,
-        cgpa: float | None = None
+        cgpa: float | None = None,
+        page: int = 1,
+        limit: int = 10
     ) -> list[Student]:
         """
         Retrieves a list of all students, optionally filtered by name (search), department, year, and/or minimum CGPA.
@@ -78,7 +80,9 @@ class StudentService:
             search,
             department,
             year,
-            cgpa
+            cgpa,
+            page,
+            limit
         )
 
 
