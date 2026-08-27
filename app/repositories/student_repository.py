@@ -29,21 +29,30 @@ class StudentRepository:
     def get_all(
         self,
         db: Session,
+        search: str | None = None,
         department: str | None = None,
         year: int | None = None
     ) -> list[Student]:
         """
-        Retrieves all student records, with optional filtering by department and year.
+        Retrieves all student records, with optional search and filtering by department and year.
         
         Args:
             db (Session): Active database session.
+            search (str | None): Optional search query for the student's name (case-insensitive substring).
             department (str | None): Optional department name to filter by.
             year (int | None): Optional academic year to filter by.
             
         Returns:
             list[Student]: List of matching student database model instances.
         """
+
         statement = select(Student)
+
+        # Apply search filter if specified
+        if search is not None:
+            statement = statement.where(
+                Student.name.ilike(f"%{search}%")
+            )
 
         # Apply department filter if specified
         if department is not None:

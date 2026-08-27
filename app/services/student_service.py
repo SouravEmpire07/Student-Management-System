@@ -55,14 +55,16 @@ class StudentService:
     def get_all_students(
         self,
         db: Session,
+        search: str | None = None,
         department: str | None = None,
         year: int | None = None
     ) -> list[Student]:
         """
-        Retrieves a list of all students, optionally filtered by department and/or year.
+        Retrieves a list of all students, optionally filtered by name (search), department, and/or year.
         
         Args:
             db (Session): Active database session.
+            search (str | None): Optional search query for the student's name (case-insensitive substring).
             department (str | None): Optional department name to filter by.
             year (int | None): Optional academic year to filter by.
             
@@ -71,9 +73,11 @@ class StudentService:
         """
         return self.repository.get_all(
             db,
+            search,
             department,
             year
         )
+
 
 
     def get_student_by_id(

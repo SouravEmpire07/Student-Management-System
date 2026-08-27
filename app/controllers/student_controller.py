@@ -64,17 +64,20 @@ def register_student_routes(app: FastAPI):
     )
     def get_all_students(
         db: DbSession,
+        search: str | None = None,
         department: str | None = None,
         year: int | None = None
     ):
         """
-        Retrieves a list of all students, optionally filtered by department and/or year.
+        Retrieves a list of all students, optionally filtered by name (search), department, and/or year.
         """
         return service.get_all_students(
             db,
+            search,
             department,
             year
         )
+
 
 
     @app.get(
@@ -147,3 +150,5 @@ def register_student_routes(app: FastAPI):
             )
 
         service.delete_student(db, student)
+
+
