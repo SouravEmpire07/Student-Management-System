@@ -31,20 +31,23 @@ class StudentRepository:
         db: Session,
         search: str | None = None,
         department: str | None = None,
-        year: int | None = None
+        year: int | None = None,
+        cgpa: float | None = None
     ) -> list[Student]:
         """
-        Retrieves all student records, with optional search and filtering by department and year.
+        Retrieves all student records, with optional search and filtering by department, year, and minimum CGPA.
         
         Args:
             db (Session): Active database session.
             search (str | None): Optional search query for the student's name (case-insensitive substring).
             department (str | None): Optional department name to filter by.
             year (int | None): Optional academic year to filter by.
+            cgpa (float | None): Optional minimum CGPA score to filter by.
             
         Returns:
             list[Student]: List of matching student database model instances.
         """
+
 
         statement = select(Student)
 
@@ -64,6 +67,12 @@ class StudentRepository:
         if year is not None:
             statement = statement.where(
                 Student.year == year
+            )
+
+        # Apply CGPA filter if specified
+        if cgpa is not None:
+            statement = statement.where(
+                Student.cgpa >= cgpa
             )
 
         result = db.execute(statement)

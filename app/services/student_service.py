@@ -57,16 +57,18 @@ class StudentService:
         db: Session,
         search: str | None = None,
         department: str | None = None,
-        year: int | None = None
+        year: int | None = None,
+        cgpa: float | None = None
     ) -> list[Student]:
         """
-        Retrieves a list of all students, optionally filtered by name (search), department, and/or year.
+        Retrieves a list of all students, optionally filtered by name (search), department, year, and/or minimum CGPA.
         
         Args:
             db (Session): Active database session.
             search (str | None): Optional search query for the student's name (case-insensitive substring).
             department (str | None): Optional department name to filter by.
             year (int | None): Optional academic year to filter by.
+            cgpa (float | None): Optional minimum CGPA score to filter by.
             
         Returns:
             list[Student]: List of student records matching the criteria.
@@ -75,8 +77,10 @@ class StudentService:
             db,
             search,
             department,
-            year
+            year,
+            cgpa
         )
+
 
 
 
