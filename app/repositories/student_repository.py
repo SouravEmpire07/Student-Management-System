@@ -34,7 +34,9 @@ class StudentRepository:
         year: int | None = None,
         cgpa: float | None = None,
         page: int = 1,
-        limit: int = 10
+        limit: int = 10,
+        sort_by: str = "created_at",
+        order: str = "asc",
     ) -> list[Student]:
         """
         Retrieves all student records, with optional search and filtering by department, year, and minimum CGPA.
@@ -76,14 +78,34 @@ class StudentRepository:
             statement = statement.where(
                 Student.cgpa >= cgpa
             )
+        # Available columns that can be used for sorting   
+        sort_columns = {
+            "name": Student.name,
+            "cgpa": Student.cgpa,
+            "created_at": Student.created_at
+        }
 
+        # Get the requested column
+        sort_column = sort_columns[sort_by]
+
+        # Apply sorting
+        if order == "desc":
+            statement = statement.order_by(
+                sort_column.desc()
+            )
+        else:
+            statement = statement.order_by(
+                sort_column.asc()
+            )
+        
         # Apply pagination
         offset = (page - 1) * limit
         statement = statement.offset(offset).limit(limit)
 
         result = db.execute(statement)
 
-        return list(result.scalars().all())  
+        return list(result.scalars().all())
+
 
     def get_by_id(self, db: Session, student_id: int) -> Student | None:
         """

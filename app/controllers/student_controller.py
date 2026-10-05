@@ -6,7 +6,7 @@ and registers them to the main FastAPI application instance.
 """
 
 from typing import Annotated
-
+from typing import Literal
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -18,6 +18,7 @@ from app.schemas.student import (
     StudentUpdate,
 )
 from app.services.student_service import StudentService
+from fastapi import Query
 
 # Instantiate core repository and service layers
 repository = StudentRepository()
@@ -68,8 +69,17 @@ def register_student_routes(app: FastAPI):
         department: str | None = None,
         year: int | None = None,
         cgpa: float | None = None,
-        page: int = 1,
-        limit: int = 10
+        page: int = Query(
+            default=1,
+            ge=1
+        ),
+        limit: int = Query(
+            default=10,
+            ge=1,
+            le=100
+        ),
+        sort_by: Literal["name", "cgpa", "created_at"] = "created_at",
+        order: Literal["asc", "desc"] = "asc"
     ):
         """
         Retrieves a list of all students, optionally filtered by name (search), department, year, and/or minimum CGPA.
@@ -81,7 +91,9 @@ def register_student_routes(app: FastAPI):
             year,
             cgpa,
             page,
-            limit
+            limit,
+            sort_by,
+            order
         )
 
 

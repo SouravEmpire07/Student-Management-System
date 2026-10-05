@@ -60,7 +60,9 @@ class StudentService:
         year: int | None = None,
         cgpa: float | None = None,
         page: int = 1,
-        limit: int = 10
+        limit: int = 10,
+        sort_by: str = "created_at",
+        order: str = "asc",
     ) -> list[Student]:
         """
         Retrieves a list of all students, optionally filtered by name (search), department, year, and/or minimum CGPA.
@@ -82,7 +84,9 @@ class StudentService:
             year,
             cgpa,
             page,
-            limit
+            limit,
+            sort_by=sort_by,
+            order=order,
         )
 
 
