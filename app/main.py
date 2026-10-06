@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from app.controllers.student_controller import register_student_routes
 from app.database.database import Base, engine
 from app.models.student import Student
+from app.models.course import Course
 
 # Synchronously create database tables on startup.
 # In production, database migrations (e.g. Alembic) are recommended instead.
