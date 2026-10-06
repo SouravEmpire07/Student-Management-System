@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, Float, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.database import Base
 
@@ -72,4 +72,9 @@ class Student(Base):
         DateTime,
         default=datetime.utcnow,
         nullable=False
+    )
+    
+    # Relationships 
+    enrollments: Mapped[list["Enrollment"]] = relationship(
+        back_populates="student"
     )

@@ -1,7 +1,7 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database import Base
+from app.database.database import Base
 
 
 class Course(Base):
@@ -20,3 +20,9 @@ class Course(Base):
     credits: Mapped[int] = mapped_column(
         nullable=False
     )
+    
+    # Relationships
+    enrollments: Mapped[list["Enrollment"]] = relationship(
+        back_populates="course"
+    )
+
