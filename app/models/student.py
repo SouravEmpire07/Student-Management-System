@@ -1,9 +1,13 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Float, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.database import Base
+
+if TYPE_CHECKING:
+    from app.models.enrollment import Enrollment
 
 
 class Student(Base):
@@ -19,7 +23,9 @@ class Student(Base):
         cgpa (float): Cumulative Grade Point Average of the student (0.0 to 10.0).
         phone (str): Contact phone number of the student.
         created_at (datetime): Timestamp when the student record was created.
+        enrollments (list[Enrollment]): One-to-many relationship linking student to their course enrollments.
     """
+
     __tablename__ = "students"
 
     # Unique student ID, auto-incremented primary key
@@ -74,7 +80,7 @@ class Student(Base):
         nullable=False
     )
     
-    # Relationships 
+    # One-to-many relationship: A student can be enrolled in multiple courses
     enrollments: Mapped[list["Enrollment"]] = relationship(
         back_populates="student"
     )
